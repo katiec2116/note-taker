@@ -25,7 +25,17 @@ class Store {
             .then(() => newNote)
     };
 
-    
+    deleteNote(id) {
+        return this.getNotes().then(notes => {
+            notes.filter(note => {
+                note.id !== id;
+            })
+                .then(newNotes => {
+                    this.writeNotes(newNotes)
+                })
+        }
+        )
+    }
 }
 
 module.exports = new Store();
