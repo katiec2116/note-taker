@@ -1,63 +1,31 @@
 // // class for notes
 
-
-class Note {
-    constructor(title, text) {
-        this.title = title;
-        this.text = text;
-    }
-}
-
-const db = require("./db.json")
-// defined functions that read write and delete
+const util = require("util");
 const fs = require("fs");
-const path = require("path");
+const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile)
 
 
-createNote = function(req){
-    fs.readFile("./db/db.json", 'utf-8', function (err,data) {
-        if (err){return console.log(err)}
+class Store {
 
-        console.log(req.body);
-        note = {title: req.body.title, text: req.body.text};
-        var noteList = JSON.parse(data);
-        noteList.push(note)
-        console.log(noteList)
-        fs.writeFile("./db/db.json", JSON.stringify(noteList, null, 2), "utf8",(err) => {
-            if (err) throw err;})
-    })
+    getNotes() {
+        return readFileAsync("./db/db.json", 'utf-8')
+    };
+
+    writeNotes(note) {
+        return writeFileAsync("./db/db.json", JSON.stringify(note))
+    };
+
+    appendNote(note) {
+        const { title, text } = note;
+        const newNote = { title, text, }
+        return this.getNotes()
+            .then(notes => [...notes, newNote])
+            .then(updateNotes => this.write(updateNotes))
+            .then(() => newNote)
+    };
+
+    
 }
 
-
-getNotes = function(res){
-    fs.readFile("./db/db.json", 'utf-8', function (err,data) {
-        if (err){return console.log(err)
-        }
-        return res.json(data)
-        
-    })
-}
-
-deleteNote = function(req){
-    fs.readFile("./db/db.json", 'utf-8', function (err,data) {
-        if (err){return console.log(err)
-        }
-        
-        
-})}
-
-
-
-//   function (err, notes) {
-//     var notesParse = JSON.parse(notes);
-//     console.log(notesParse)
-//     var x = JSON.stringify(req.body);
-//     console.log(x)
-//     // notesParse.push(x)
-//     fs.writeFile("./db/db.json", notesParse, 'utf-8',(err) => {
-//         if (err) throw err;})
-//     // res.json(true) 
-//     })
-
-exports.createNote = createNote;
-exports.getNotes = getNotes;
+module.exports = new Store();

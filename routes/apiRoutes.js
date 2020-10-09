@@ -1,25 +1,32 @@
-const db = require("../db/db.json")
-const store = require("../db/store")
-const fs = require("fs");
-const path = require("path");
+const express = require("express");
+const app = express();
+const notes = require("../db/db.json")
+const Store = require("../db/store")
+// const fs = require("fs");
+// const path = require("path");
 
-// body parsing middleware
 module.exports = function (app) {
-    // app.use(express.urlencoded({ extended: true }));
-    // app.use(express.json());
-
-
-    app.post("/api/notes", function (req, res) {
-        store.createNote(req);
-    });
 
     app.get("/api/notes", function (req, res) {
-        store.getNotes(res);
+        Store.getNotes()
+        .then(notes => res.json(notes))
+        .catch(err => res.status(500).json(err))
+        });
 
-    });
+    app.post("/api/notes", function (req, res) {
+        Store.writeNotes(req.body)
+        .then(notes => (res.json(notes)))
+        .catch(err => res.status(500).json(err))
+        });
 
 
-};
+    app.delete("/api/notes/:id"), function(req,res){
+        Store.deleteNote(req.params.id)
+        .then(() => res.json({okay: "true"}))
+        .catch(err => res.status(500).json(err))
+        }
+    
+}
 
 
 
