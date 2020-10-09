@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const notes = require("../db/db.json")
+// const notes = require("../db/db.json")
 const Store = require("../db/store")
 
 module.exports = function (app) {
@@ -18,12 +18,11 @@ module.exports = function (app) {
         });
 
 
-    app.delete("/api/notes/:id"), function(req,res){
-        console.log(req)
+    app.delete("/api/notes/:id", function(req,res){
         Store.removeNote(req.params.id)
         .then(() => res.json({okay: "true"}))
         .catch(err => res.status(500).json(err))
-        }
+        })
     
 }
 

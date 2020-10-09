@@ -9,7 +9,7 @@ const writeFileAsync = util.promisify(fs.writeFile);
 class Store {
     constructor() {
         // start id off at zero
-        this.id = 0;
+        this.id = 1;
     }
 
     // read notes from db
@@ -29,9 +29,11 @@ class Store {
             let allNotes;
             try {
                 // create array of note objects
-                allNotes = [].concat(JSON.parse(notes));}
+                allNotes = [].concat(JSON.parse(notes));
+            }
             catch (err) {
-                allNotes = [];}
+                allNotes = [];
+            }
             return allNotes;
         })
     }
@@ -54,10 +56,9 @@ class Store {
         // use get notes function to acess array of notes
         return this.getNotes()
         // filter through notes array to get all notes besides the one with the matching ID
-            .then(notes => notes.filter(note => note.id !== parseInt(id)))
-            // rewrite db file with new array
-            .then(updatedNotes => this.write(updatedNotes))
+            .then(notes => this.write(notes.filter(note => note.id != id)))
     }
+    
 }
 
 module.exports = new Store();
