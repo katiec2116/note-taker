@@ -8,20 +8,20 @@ const Store = require("../db/store")
 module.exports = function (app) {
 
     app.get("/api/notes", function (req, res) {
-        Store.getNotes()
+        Store.read()
         .then(notes => res.json(notes))
         .catch(err => res.status(500).json(err))
         });
 
     app.post("/api/notes", function (req, res) {
-        Store.writeNotes(req.body)
+        Store.addNotes(req.body)
         .then(notes => (res.json(notes)))
         .catch(err => res.status(500).json(err))
         });
 
 
     app.delete("/api/notes/:id"), function(req,res){
-        Store.deleteNote(req.params.id)
+        Store.removeNote(req.params.id)
         .then(() => res.json({okay: "true"}))
         .catch(err => res.status(500).json(err))
         }
