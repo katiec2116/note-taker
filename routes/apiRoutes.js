@@ -1,14 +1,13 @@
 const express = require("express");
 const app = express();
-const notes = require("../db/db.json")
+// const notes = require("../db/db.json")
 const Store = require("../db/store")
-// const fs = require("fs");
-// const path = require("path");
+
 
 module.exports = function (app) {
 
     app.get("/api/notes", function (req, res) {
-        Store.read()
+        Store.getNotes()
         .then(notes => res.json(notes))
         .catch(err => res.status(500).json(err))
         });
@@ -21,6 +20,7 @@ module.exports = function (app) {
 
 
     app.delete("/api/notes/:id"), function(req,res){
+        console.log(req)
         Store.removeNote(req.params.id)
         .then(() => res.json({okay: "true"}))
         .catch(err => res.status(500).json(err))
