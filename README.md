@@ -41,6 +41,8 @@ To install use the following command
 - Click on the trash can to delete a note
 
 
+![](recording.gif)
+
 ## License
 
 MIT
