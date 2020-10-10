@@ -7,23 +7,23 @@ module.exports = function (app) {
 
     app.get("/api/notes", function (req, res) {
         Store.getNotes()
-        .then(notes => res.json(notes))
-        .catch(err => res.status(500).json(err))
-        });
+            .then(notes => res.json(notes))
+            .catch(err => res.status(500).json(err))
+    });
 
     app.post("/api/notes", function (req, res) {
         Store.addNotes(req.body)
-        .then(notes => (res.json(notes)))
-        .catch(err => res.status(500).json(err))
-        });
+            .then(notes => (res.json(notes)))
+            .catch(err => res.status(500).json(err))
+    });
 
 
-    app.delete("/api/notes/:id", function(req,res){
+    app.delete("/api/notes/:id", function (req, res) {
         Store.removeNote(req.params.id)
-        .then(() => res.json({okay: "true"}))
-        .catch(err => res.status(500).json(err))
-        })
-    
+            .then(() => res.json({ okay: "true" }))
+            .catch(err => res.status(500).json(err))
+    })
+
 }
 
 
